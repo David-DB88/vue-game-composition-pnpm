@@ -18,7 +18,7 @@ import Figure from "@/components/Figure.vue";
 import WrongLetters from "@/components/WrongLetters.vue";
 import Word from "@/components/Word.vue";
 import Notification from "@/components/Notification.vue";
-import {computed, ref, watch, watchEffect} from "vue";
+import {onBeforeUnmount, ref, watch} from "vue";
 import Popup from "@/components/Popup.vue";
 import {useData} from "@/Data/useData";
 import {useComputed} from "@/hooks/useComputed";
@@ -57,17 +57,17 @@ window.addEventListener('keydown', ({key})=>{
   }
   if(letters.value.includes(key)){
     notification.value?.open()
-   setTimeout(()=>{
+   const timeOut = setTimeout(()=>{
       notification.value?.close()
     }, 1000)
-    return
+    return clearTimeout(()=>timeOut)
   }
   if(/^[a-z]+$/i.test(key)){
     letters.value.push(key.toLowerCase())
   }
 
 })
-
+onBeforeUnmount(()=>window.removeEventListener('keydown'))
 </script>
 
 <style>
